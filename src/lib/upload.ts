@@ -69,8 +69,6 @@ export async function uploadImage(
       // Se falhar, tentar verificar o bucket para dar uma mensagem melhor
       if (uploadError.message?.includes('Bucket not found') || 
           uploadError.message?.includes('not found') ||
-          uploadError.statusCode === '404' ||
-          uploadError.statusCode === 404 ||
           uploadError.message?.includes('does not exist')) {
         
         // Tentar listar buckets para ver o que existe
@@ -95,17 +93,13 @@ export async function uploadImage(
       if (uploadError.message?.includes('permission') || 
           uploadError.message?.includes('policy') ||
           uploadError.message?.includes('denied') ||
-          uploadError.message?.includes('Forbidden') ||
-          uploadError.statusCode === '403' ||
-          uploadError.statusCode === 403) {
+          uploadError.message?.includes('Forbidden')) {
         throw new Error('Erro de permissão. Execute configurar-storage.sql no Supabase para configurar as políticas.');
       }
       
       // Verificar se é erro de arquivo duplicado
       if (uploadError.message?.includes('duplicate') || 
-          uploadError.message?.includes('already exists') ||
-          uploadError.statusCode === '409' ||
-          uploadError.statusCode === 409) {
+          uploadError.message?.includes('already exists')) {
         // Tentar novamente com timestamp diferente
         const newFileName = `${userId}-${Date.now()}-${Math.random().toString(36).substring(7)}.jpg`;
         const newFilePath = `${folder}/${newFileName}`;
@@ -133,7 +127,7 @@ export async function uploadImage(
         return data.publicUrl;
       }
       
-      throw new Error(`Erro ao fazer upload: ${uploadError.message || 'Erro desconhecido'} (Status: ${uploadError.statusCode || 'N/A'})`);
+      throw new Error(`Erro ao fazer upload: ${uploadError.message || 'Erro desconhecido'}`);
     }
     
     console.log('✅ Upload concluído:', uploadData);

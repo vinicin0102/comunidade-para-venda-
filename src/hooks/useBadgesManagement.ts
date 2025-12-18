@@ -12,7 +12,7 @@ export function useCreateBadge() {
         .rpc('create_badge_admin', {
           p_name: data.name,
           p_icon: data.icon,
-          p_description: data.description || null,
+          p_description: data.description || undefined,
           p_points_required: data.points_required || 0
         });
 
@@ -43,10 +43,10 @@ export function useUpdateBadge() {
       const { data: result, error } = await supabase
         .rpc('update_badge_admin', {
           p_badge_id: id,
-          p_name: data.name || null,
-          p_description: data.description || null,
-          p_icon: data.icon || null,
-          p_points_required: data.points_required ?? null
+          p_name: data.name || undefined,
+          p_description: data.description || undefined,
+          p_icon: data.icon || undefined,
+          p_points_required: data.points_required ?? undefined
         });
 
       if (error) throw error;

@@ -153,7 +153,7 @@ export function PostCard({ post }: PostCardProps) {
             {/* Mostrar badges/conquistas */}
             {(() => {
               const hasBadges = post.user_badges && post.user_badges.length > 0;
-              if (hasBadges) {
+              if (hasBadges && post.user_badges) {
                 console.log(`✅ PostCard: ${profile?.username} has ${post.user_badges.length} badges:`, post.user_badges);
               } else {
                 console.log(`⚠️ PostCard: ${profile?.username} has no badges. user_badges:`, post.user_badges);
