@@ -1,0 +1,399 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=Space+Grotesk:wght@500;600;700&display=swap');
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* PWA Mobile Optimizations */
+@supports (-webkit-touch-callout: none) {
+  /* iOS specific styles */
+  body {
+    -webkit-touch-callout: none;
+    -webkit-user-select: none;
+    -webkit-tap-highlight-color: transparent;
+  }
+}
+
+/* Mobile viewport fixes */
+@layer base {
+  :root {
+    --background: 0 0% 100%;
+    --foreground: 0 0% 10%;
+
+    --card: 0 0% 98%;
+    --card-foreground: 0 0% 10%;
+
+    --popover: 0 0% 100%;
+    --popover-foreground: 0 0% 10%;
+
+    --primary: 25 95% 53%;
+    --primary-foreground: 0 0% 100%;
+
+    --secondary: 25 95% 45%;
+    --secondary-foreground: 0 0% 100%;
+
+    --muted: 0 0% 96%;
+    --muted-foreground: 0 0% 45%;
+
+    --accent: 25 95% 95%;
+    --accent-foreground: 25 95% 25%;
+
+    --destructive: 0 84% 60%;
+    --destructive-foreground: 0 0% 100%;
+
+    --border: 0 0% 90%;
+    --input: 0 0% 90%;
+    --ring: 25 95% 53%;
+
+    --radius: 0.75rem;
+
+    /* Custom tokens */
+    --gradient-primary: linear-gradient(135deg, hsl(25 95% 50%) 0%, hsl(25 95% 60%) 100%);
+    --gradient-secondary: linear-gradient(135deg, hsl(25 95% 45%) 0%, hsl(25 95% 55%) 100%);
+    --gradient-hero: linear-gradient(180deg, hsl(25 95% 95%) 0%, hsl(0 0% 100%) 100%);
+    --gradient-card: linear-gradient(180deg, hsl(0 0% 100%) 0%, hsl(0 0% 98%) 100%);
+    
+    --shadow-sm: 0 1px 2px 0 hsl(0 0% 10% / 0.05);
+    --shadow-md: 0 4px 6px -1px hsl(0 0% 10% / 0.08), 0 2px 4px -2px hsl(0 0% 10% / 0.05);
+    --shadow-lg: 0 10px 15px -3px hsl(0 0% 10% / 0.08), 0 4px 6px -4px hsl(0 0% 10% / 0.05);
+    --shadow-glow: 0 0 20px hsl(25 95% 53% / 0.3);
+    --shadow-orange: 0 0 20px hsl(25 95% 53% / 0.4);
+
+    --sidebar-background: 0 0% 100%;
+    --sidebar-foreground: 0 0% 10%;
+    --sidebar-primary: 25 95% 53%;
+    --sidebar-primary-foreground: 0 0% 100%;
+    --sidebar-accent: 25 95% 95%;
+    --sidebar-accent-foreground: 25 95% 25%;
+    --sidebar-border: 0 0% 90%;
+    --sidebar-ring: 25 95% 53%;
+  }
+
+  .dark {
+    --background: 0 0% 5%;
+    --foreground: 0 0% 98%;
+
+    --card: 0 0% 8%;
+    --card-foreground: 0 0% 98%;
+
+    --popover: 0 0% 8%;
+    --popover-foreground: 0 0% 98%;
+
+    --primary: 25 95% 55%;
+    --primary-foreground: 0 0% 5%;
+
+    --secondary: 25 95% 50%;
+    --secondary-foreground: 0 0% 100%;
+
+    --muted: 0 0% 15%;
+    --muted-foreground: 0 0% 65%;
+
+    --accent: 25 95% 15%;
+    --accent-foreground: 25 95% 75%;
+
+    --destructive: 0 70% 50%;
+    --destructive-foreground: 0 0% 100%;
+
+    --border: 0 0% 20%;
+    --input: 0 0% 20%;
+    --ring: 25 95% 55%;
+
+    --gradient-primary: linear-gradient(135deg, hsl(25 95% 50%) 0%, hsl(25 95% 60%) 100%);
+    --gradient-secondary: linear-gradient(135deg, hsl(25 95% 45%) 0%, hsl(25 95% 55%) 100%);
+    --gradient-hero: linear-gradient(180deg, hsl(0 0% 5%) 0%, hsl(0 0% 8%) 100%);
+    --gradient-card: linear-gradient(180deg, hsl(0 0% 8%) 0%, hsl(0 0% 10%) 100%);
+
+    --sidebar-background: 0 0% 8%;
+    --sidebar-foreground: 0 0% 98%;
+    --sidebar-primary: 25 95% 55%;
+    --sidebar-primary-foreground: 0 0% 5%;
+    --sidebar-accent: 25 95% 15%;
+    --sidebar-accent-foreground: 25 95% 75%;
+    --sidebar-border: 0 0% 20%;
+    --sidebar-ring: 25 95% 55%;
+  }
+}
+
+@layer base {
+  * {
+    @apply border-border;
+  }
+
+  body {
+    @apply bg-background text-foreground font-sans antialiased;
+    font-feature-settings: "rlig" 1, "calt" 1;
+    touch-action: pan-x pan-y;
+    -webkit-user-select: none;
+    user-select: none;
+    background-color: hsl(0 0% 5%) !important;
+  }
+  
+  html {
+    background-color: hsl(0 0% 5%) !important;
+  }
+  
+  #root {
+    background-color: hsl(0 0% 5%) !important;
+    min-height: 100vh;
+  }
+  
+  /* Desabilitar zoom por pinch em todos os elementos */
+  * {
+    touch-action: manipulation;
+  }
+  
+  /* Permitir seleção de texto em inputs e textareas */
+  input, textarea, [contenteditable] {
+    -webkit-user-select: text;
+    user-select: text;
+  }
+
+  h1, h2, h3, h4, h5, h6 {
+    @apply font-display font-bold tracking-tight;
+  }
+}
+
+@layer utilities {
+  .gradient-primary {
+    background: var(--gradient-primary);
+  }
+
+  .gradient-secondary {
+    background: var(--gradient-secondary);
+  }
+
+  .gradient-hero {
+    background: var(--gradient-hero);
+  }
+
+  .gradient-card {
+    background: var(--gradient-card);
+  }
+
+  .shadow-glow {
+    box-shadow: var(--shadow-glow);
+  }
+
+  .shadow-orange {
+    box-shadow: var(--shadow-orange);
+  }
+
+  .text-gradient {
+    background: var(--gradient-primary);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+
+  .animate-fade-in {
+    animation: fadeIn 0.3s ease-out;
+  }
+
+  .animate-slide-up {
+    animation: slideUp 0.4s ease-out;
+  }
+
+  .animate-scale-in {
+    animation: scaleIn 0.2s ease-out;
+  }
+
+  .animate-pulse-slow {
+    animation: pulse 3s ease-in-out infinite;
+  }
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes slideUp {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes scaleIn {
+  from {
+    opacity: 0;
+    transform: scale(0.95);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+/* Custom scrollbar */
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+
+::-webkit-scrollbar-track {
+  background: hsl(var(--muted));
+  border-radius: 3px;
+}
+
+::-webkit-scrollbar-thumb {
+  background: hsl(var(--muted-foreground) / 0.3);
+  border-radius: 3px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: hsl(var(--muted-foreground) / 0.5);
+}
+
+/* Hide scrollbar utility */
+.scrollbar-hide {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+
+.scrollbar-hide::-webkit-scrollbar {
+  display: none;
+}
+
+/* Mobile Optimizations */
+@media (max-width: 768px) {
+  /* Melhorar performance em mobile */
+  * {
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+  
+  /* Otimizar animações em mobile */
+  @media (prefers-reduced-motion: no-preference) {
+    * {
+      will-change: auto;
+    }
+  }
+  
+  /* Melhorar touch targets */
+  button, a, [role="button"] {
+    min-height: 44px;
+    min-width: 44px;
+  }
+  
+  /* Otimizar imagens */
+  img {
+    max-width: 100%;
+    height: auto;
+    image-rendering: -webkit-optimize-contrast;
+    image-rendering: crisp-edges;
+  }
+}
+
+/* Safe area insets para iPhone com notch */
+@supports (padding: max(0px)) {
+  body {
+    padding-left: max(0px, env(safe-area-inset-left));
+    padding-right: max(0px, env(safe-area-inset-right));
+  }
+  
+  .bottom-nav {
+    padding-bottom: max(16px, env(safe-area-inset-bottom));
+  }
+}
+
+/* PWA Standalone mode optimizations */
+@media (display-mode: standalone) {
+  body {
+    /* Remover espaçamento extra quando em modo standalone */
+    padding-top: env(safe-area-inset-top);
+    background-color: hsl(0 0% 5%) !important;
+  }
+  
+  html {
+    background-color: hsl(0 0% 5%) !important;
+  }
+  
+  #root {
+    background-color: hsl(0 0% 5%) !important;
+  }
+  
+  /* Garantir que inputs e textareas não fiquem brancos */
+  input, textarea {
+    background-color: hsl(0 0% 16%) !important;
+    color: hsl(0 0% 98%) !important;
+  }
+  
+  /* Ocultar barra de endereço em alguns navegadores */
+  @media (max-width: 768px) {
+    body {
+      /* Ajustes específicos para PWA standalone */
+      background-color: hsl(0 0% 5%) !important;
+    }
+  }
+}
+
+/* iOS Safari specific fixes */
+@supports (-webkit-touch-callout: none) {
+  /* Fix para viewport height em iOS */
+  :root {
+    --vh: 1vh;
+  }
+  
+  /* Fix para 100vh em iOS */
+  .min-h-screen {
+    min-height: -webkit-fill-available;
+  }
+  
+  /* Melhorar scroll em iOS */
+  body {
+    -webkit-overflow-scrolling: touch;
+  }
+}
+
+/* Toast Notifications Styles */
+[data-sonner-toaster] {
+  position: fixed !important;
+  top: 20px !important;
+  left: 50% !important;
+  transform: translateX(-50%) !important;
+  z-index: 9999 !important;
+  width: 100% !important;
+  max-width: 420px !important;
+  padding: 0 16px !important;
+  pointer-events: none !important;
+}
+
+[data-sonner-toast] {
+  pointer-events: auto !important;
+  margin: 0 auto 8px !important;
+  width: 100% !important;
+  max-width: 100% !important;
+  box-sizing: border-box !important;
+  overflow: visible !important;
+  word-wrap: break-word !important;
+}
+
+[data-sonner-toast] [data-title] {
+  font-weight: 600 !important;
+  font-size: 14px !important;
+  line-height: 1.4 !important;
+  margin-bottom: 4px !important;
+}
+
+[data-sonner-toast] [data-description] {
+  font-size: 13px !important;
+  line-height: 1.4 !important;
+  opacity: 0.9 !important;
+  margin-top: 4px !important;
+}
+
+/* Garantir que o conteúdo não seja cortado */
+[data-sonner-toast] > * {
+  overflow: visible !important;
+  text-overflow: ellipsis !important;
+}
+
