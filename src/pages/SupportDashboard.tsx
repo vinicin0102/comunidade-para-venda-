@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { Shield, Users, MessageSquare, LogOut, Home, Gift, BookOpen, Trophy, Settings } from 'lucide-react';
+import { Shield, Users, MessageSquare, LogOut, Home, Gift, BookOpen, Trophy, Settings, Bell } from 'lucide-react';
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
@@ -17,6 +17,7 @@ import { RewardEditManagement } from '@/components/support/RewardEditManagement'
 import { ContentManagement } from '@/components/support/ContentManagement';
 import { BadgeManagement } from '@/components/support/BadgeManagement';
 import { ThemeSettings } from '@/components/support/ThemeSettings';
+import { NotificationManagement } from '@/components/support/NotificationManagement';
 import { useSupportSettings, useUpdateSupportSetting } from '@/hooks/useSupportSettings';
 import { useAppName } from '@/hooks/useAppTheme';
 import { cn } from '@/lib/utils';
@@ -50,24 +51,24 @@ export default function SupportDashboard() {
   const handleSignOut = async () => {
     try {
       console.log('🔄 Iniciando logout...');
-      
+
       // Fazer logout do Supabase
       await signOut();
-      
+
       console.log('✅ Logout concluído, redirecionando...');
-      
+
       // Limpar localStorage e sessionStorage
       localStorage.clear();
       sessionStorage.clear();
-      
+
       // Aguardar um pouco para garantir que tudo foi limpo
       await new Promise(resolve => setTimeout(resolve, 200));
-      
+
       // Forçar navegação completa
       window.location.replace('/support/login');
     } catch (error) {
       console.error('❌ Erro ao fazer logout:', error);
-      
+
       // Mesmo com erro, limpar tudo e forçar navegação
       localStorage.clear();
       sessionStorage.clear();
@@ -114,7 +115,7 @@ export default function SupportDashboard() {
         <Tabs value={activeTab} onValueChange={setActiveTab} className="space-y-4">
           <TabsList className={cn(
             "bg-[#1a1a1a] border border-[#2a2a2a] w-full grid",
-            canAccessAdminPanel ? "grid-cols-7" : "grid-cols-6"
+            canAccessAdminPanel ? "grid-cols-8" : "grid-cols-7"
           )}>
             <TabsTrigger value="chat" className="data-[state=active]:bg-primary text-xs">
               <MessageSquare className="h-4 w-4 sm:mr-2" />
@@ -139,6 +140,10 @@ export default function SupportDashboard() {
             <TabsTrigger value="settings" className="data-[state=active]:bg-primary text-xs">
               <Settings className="h-4 w-4 sm:mr-2" />
               <span className="hidden sm:inline">Config</span>
+            </TabsTrigger>
+            <TabsTrigger value="notifications" className="data-[state=active]:bg-primary text-xs">
+              <Bell className="h-4 w-4 sm:mr-2" />
+              <span className="hidden sm:inline">Notificações</span>
             </TabsTrigger>
             {canAccessAdminPanel && (
               <TabsTrigger value="users" className="data-[state=active]:bg-primary text-xs">
@@ -173,6 +178,10 @@ export default function SupportDashboard() {
             <ThemeSettings />
           </TabsContent>
 
+          <TabsContent value="notifications" className="space-y-4">
+            <NotificationManagement />
+          </TabsContent>
+
           {canAccessAdminPanel && (
             <TabsContent value="users" className="space-y-4">
               <UserManagement />
@@ -192,32 +201,32 @@ function AppNameDisplay() {
 function SupportSettingsPanel() {
   const { data: settings, isLoading } = useSupportSettings();
   const updateSetting = useUpdateSupportSetting();
-  
+
   const autoReplyEnabled = settings?.auto_reply_enabled === 'true';
   const autoReplyMessage = settings?.auto_reply_message || 'Olá! Recebemos sua mensagem. Nossa equipe de suporte responderá em até 10 minutos. Obrigado pela paciência! 🙏';
   const [messageText, setMessageText] = useState(autoReplyMessage);
-  
+
   // Atualizar o texto quando as configurações carregarem
   useEffect(() => {
     if (settings?.auto_reply_message) {
       setMessageText(settings.auto_reply_message);
     }
   }, [settings]);
-  
+
   const handleToggleAutoReply = () => {
     updateSetting.mutate({
       key: 'auto_reply_enabled',
       value: autoReplyEnabled ? 'false' : 'true'
     });
   };
-  
+
   const handleSaveMessage = () => {
     updateSetting.mutate({
       key: 'auto_reply_message',
       value: messageText.trim() || 'Olá! Recebemos sua mensagem. Nossa equipe de suporte responderá em até 10 minutos. Obrigado pela paciência! 🙏'
     });
   };
-  
+
   if (isLoading) {
     return (
       <Card className="border border-[#2a2a2a] bg-[#1a1a1a]">
@@ -227,7 +236,7 @@ function SupportSettingsPanel() {
       </Card>
     );
   }
-  
+
   return (
     <Card className="border border-[#2a2a2a] bg-[#1a1a1a]">
       <CardHeader>
@@ -256,7 +265,7 @@ function SupportSettingsPanel() {
             disabled={updateSetting.isPending}
           />
         </div>
-        
+
         <div className="p-4 bg-[#2a2a2a]/50 rounded-lg">
           <p className="text-xs text-gray-500">
             Status atual: {autoReplyEnabled ? (
@@ -266,7 +275,7 @@ function SupportSettingsPanel() {
             )}
           </p>
         </div>
-        
+
         <div className="space-y-3">
           <div>
             <Label htmlFor="auto-reply-message" className="text-white font-medium">

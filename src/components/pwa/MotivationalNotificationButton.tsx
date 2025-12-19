@@ -1,28 +1,47 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import despia from 'despia-native';
 import { Bell, Sparkles } from 'lucide-react';
 
-const MOTIVATIONAL_MESSAGES = [
-    { title: "Você está no caminho certo! 🚀", body: "Continue focado, cada passo conta!" },
-    { title: "Hora de brilhar! ✨", body: "Sua dedicação vai te levar longe!" },
-    { title: "Não desista! 💪", body: "Os melhores resultados vêm com persistência." },
-    { title: "Você é incrível! 🌟", body: "Acredite no seu potencial ilimitado!" },
-    { title: "Foco total! 🎯", body: "Mantenha os olhos no objetivo!" },
-    { title: "Energia positiva! ⚡", body: "Hoje é dia de fazer acontecer!" },
-    { title: "Momento de ação! 🔥", body: "Transforme seus sonhos em realidade!" },
-    { title: "Você consegue! 🏆", body: "Campeões nunca desistem!" },
-    { title: "Inspire-se! 💡", body: "Cada dia é uma nova oportunidade!" },
-    { title: "Vamos juntos! 🤝", body: "A comunidade está com você!" },
-    { title: "Supere seus limites! 🦅", body: "Você é mais forte do que imagina!" },
-    { title: "Acredite mais! 💎", body: "Seu esforço será recompensado!" },
-    { title: "Momento de crescer! 🌱", body: "Evolua um pouco mais hoje!" },
-    { title: "Você é especial! ⭐", body: "Sua jornada é única e valiosa!" },
-    { title: "Continue firme! 🛡️", body: "A consistência é a chave do sucesso!" },
+interface MotivationalMessage {
+    id: string;
+    title: string;
+    body: string;
+}
+
+const DEFAULT_MESSAGES: MotivationalMessage[] = [
+    { id: '1', title: "Você está no caminho certo! 🚀", body: "Continue focado, cada passo conta!" },
+    { id: '2', title: "Hora de brilhar! ✨", body: "Sua dedicação vai te levar longe!" },
+    { id: '3', title: "Não desista! 💪", body: "Os melhores resultados vêm com persistência." },
+    { id: '4', title: "Você é incrível! 🌟", body: "Acredite no seu potencial ilimitado!" },
+    { id: '5', title: "Foco total! 🎯", body: "Mantenha os olhos no objetivo!" },
+    { id: '6', title: "Energia positiva! ⚡", body: "Hoje é dia de fazer acontecer!" },
+    { id: '7', title: "Momento de ação! 🔥", body: "Transforme seus sonhos em realidade!" },
+    { id: '8', title: "Você consegue! 🏆", body: "Campeões nunca desistem!" },
+    { id: '9', title: "Inspire-se! 💡", body: "Cada dia é uma nova oportunidade!" },
+    { id: '10', title: "Vamos juntos! 🤝", body: "A comunidade está com você!" },
+    { id: '11', title: "Supere seus limites! 🦅", body: "Você é mais forte do que imagina!" },
+    { id: '12', title: "Acredite mais! 💎", body: "Seu esforço será recompensado!" },
+    { id: '13', title: "Momento de crescer! 🌱", body: "Evolua um pouco mais hoje!" },
+    { id: '14', title: "Você é especial! ⭐", body: "Sua jornada é única e valiosa!" },
+    { id: '15', title: "Continue firme! 🛡️", body: "A consistência é a chave do sucesso!" },
 ];
 
-function getRandomMessage() {
-    const index = Math.floor(Math.random() * MOTIVATIONAL_MESSAGES.length);
-    return MOTIVATIONAL_MESSAGES[index];
+function getMessages(): MotivationalMessage[] {
+    const saved = localStorage.getItem('motivational_messages');
+    if (saved) {
+        try {
+            return JSON.parse(saved);
+        } catch (e) {
+            return DEFAULT_MESSAGES;
+        }
+    }
+    return DEFAULT_MESSAGES;
+}
+
+function getRandomMessage(): MotivationalMessage {
+    const messages = getMessages();
+    const index = Math.floor(Math.random() * messages.length);
+    return messages[index];
 }
 
 export function MotivationalNotificationButton() {
