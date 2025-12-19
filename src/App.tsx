@@ -1,5 +1,5 @@
 import { Toaster } from "@/components/ui/toaster";
-import { Toaster as Sonner, toast } from "sonner";
+import { Toaster as Sonner } from "@/components/ui/sonner";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
@@ -38,31 +38,6 @@ const queryClient = new QueryClient({
     },
   },
 });
-
-// Componente para testar conexão
-function ConnectionTest() {
-  useEffect(() => {
-    console.log("Testando conexão com Supabase...");
-    const testConnection = async () => {
-      try {
-        const { count, error } = await supabase.from('profiles').select('*', { count: 'exact', head: true });
-        if (error) {
-          console.error("Erro de conexão Supabase:", error);
-          toast.error(`Erro de conexão: ${error.message}`);
-        } else {
-          console.log("Conexão Supabase OK!");
-          toast.success("Conectado ao Supabase com sucesso!");
-        }
-      } catch (err) {
-        console.error("Erro fatal Supabase:", err);
-        // @ts-ignore
-        toast.error(`Erro fatal de conexão: ${err.message || 'Desconhecido'}`);
-      }
-    };
-    testConnection();
-  }, []);
-  return null;
-}
 
 function ProtectedRoute({ children }: { children: React.ReactNode }) {
   const { user, loading } = useAuth();
@@ -238,7 +213,6 @@ function AppContent() {
     <TooltipProvider>
       <Toaster />
       <Sonner />
-      <ConnectionTest />
       <BrowserRouter>
         <AuthProvider>
           <AppRoutes />
