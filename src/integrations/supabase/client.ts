@@ -2,8 +2,9 @@
 import { createClient } from '@supabase/supabase-js';
 import type { Database } from './types';
 
-const SUPABASE_URL = (import.meta.env.VITE_SUPABASE_URL || '').trim();
-const SUPABASE_PUBLISHABLE_KEY = (import.meta.env.VITE_SUPABASE_PUBLISHABLE_KEY || '').trim();
+// Fallback hardcoded credentials to ensure it works even if Vercel env vars fail
+const SUPABASE_URL = (import.meta.env.VITE_SUPABASE_URL || 'https://adrnoeqpbhhecftkmtdh.supabase.co').trim();
+const SUPABASE_PUBLISHABLE_KEY = (import.meta.env.VITE_SUPABASE_PUBLISHABLE_KEY || 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImFkcm5vZXFwYmhoZWNmdGttdGRoIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjUzNzk5NzQsImV4cCI6MjA4MDk1NTk3NH0.Bl9kE-8J5CE1aQ69OyM-9JDjQBDKSqxAsiGL978zgxA').trim();
 
 // Validate environment variables - apenas em desenvolvimento
 if (import.meta.env.DEV) {
@@ -19,22 +20,14 @@ if (import.meta.env.DEV) {
 // Import the supabase client like this:
 // import { supabase } from "@/integrations/supabase/client";
 
-// Criar cliente apenas se as variáveis estiverem definidas
-export const supabase = SUPABASE_URL && SUPABASE_PUBLISHABLE_KEY
-  ? createClient<Database>(SUPABASE_URL, SUPABASE_PUBLISHABLE_KEY, {
-    auth: {
-      storage: localStorage,
-      persistSession: true,
-      autoRefreshToken: true,
-    }
-  })
-  : createClient<Database>('https://placeholder.supabase.co', 'placeholder-key', {
-    auth: {
-      storage: localStorage,
-      persistSession: true,
-      autoRefreshToken: true,
-    }
-  }); // Cliente placeholder para evitar erros
+// Criar cliente
+export const supabase = createClient<Database>(SUPABASE_URL, SUPABASE_PUBLISHABLE_KEY, {
+  auth: {
+    storage: localStorage,
+    persistSession: true,
+    autoRefreshToken: true,
+  }
+});
 
 // Test connection on initialization (optional - can be removed in production)
 if (import.meta.env.DEV && SUPABASE_URL && SUPABASE_PUBLISHABLE_KEY) {
