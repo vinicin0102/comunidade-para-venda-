@@ -3,6 +3,7 @@ import { CreatePostCard } from '@/components/feed/CreatePostCard';
 import { PostCard } from '@/components/feed/PostCard';
 import { usePosts } from '@/hooks/usePosts';
 import { Skeleton } from '@/components/ui/skeleton';
+import { MotivationalNotificationButton } from '@/components/pwa/MotivationalNotificationButton';
 
 import { Plus } from 'lucide-react';
 import { Button } from '@/components/ui/button';
@@ -25,6 +26,9 @@ export default function Feed() {
             <p className="text-gray-400 text-xs">
               Comunidade • {posts?.length || 0} {posts?.length === 1 ? 'publicação' : 'publicações'}
             </p>
+            <div className="mt-3">
+              <MotivationalNotificationButton />
+            </div>
           </div>
           <Button
             onClick={() => setShowCreateCard(!showCreateCard)}
