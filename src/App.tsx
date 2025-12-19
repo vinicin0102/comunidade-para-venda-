@@ -6,6 +6,7 @@ import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
 import { AuthProvider, useAuth } from "@/contexts/AuthContext";
 import { ErrorBoundary } from "@/components/ErrorBoundary";
 import { InstallPrompt } from "@/components/pwa/InstallPrompt";
+import { NotificationPrompt } from "@/components/pwa/NotificationPrompt";
 import { useEffect, useState } from "react";
 import { supabase } from "@/integrations/supabase/client";
 
@@ -217,6 +218,7 @@ function AppContent() {
         <AuthProvider>
           <AppRoutes />
           <InstallPrompt />
+          <NotificationPrompt />
         </AuthProvider>
       </BrowserRouter>
     </TooltipProvider>
