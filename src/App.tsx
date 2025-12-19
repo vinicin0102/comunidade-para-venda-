@@ -1,5 +1,5 @@
 import { Toaster } from "@/components/ui/toaster";
-import { Toaster as Sonner } from "@/components/ui/sonner";
+import { Toaster as Sonner, toast } from "sonner";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
@@ -39,13 +39,38 @@ const queryClient = new QueryClient({
   },
 });
 
+// Componente para testar conexão
+function ConnectionTest() {
+  useEffect(() => {
+    console.log("Testando conexão com Supabase...");
+    const testConnection = async () => {
+      try {
+        const { count, error } = await supabase.from('profiles').select('*', { count: 'exact', head: true });
+        if (error) {
+          console.error("Erro de conexão Supabase:", error);
+          toast.error(`Erro de conexão: ${error.message}`);
+        } else {
+          console.log("Conexão Supabase OK!");
+          toast.success("Conectado ao Supabase com sucesso!");
+        }
+      } catch (err) {
+        console.error("Erro fatal Supabase:", err);
+        // @ts-ignore
+        toast.error(`Erro fatal de conexão: ${err.message || 'Desconhecido'}`);
+      }
+    };
+    testConnection();
+  }, []);
+  return null;
+}
+
 function ProtectedRoute({ children }: { children: React.ReactNode }) {
   const { user, loading } = useAuth();
   const [checkingBan, setCheckingBan] = useState(true);
   const [isBanned, setIsBanned] = useState(false);
   const [banMessage, setBanMessage] = useState<string | null>(null);
   const [loadingTimeout, setLoadingTimeout] = useState(false);
-  
+
   // Timeout de segurança: se loading demorar mais de 10 segundos, libera
   useEffect(() => {
     if (loading) {
@@ -56,34 +81,34 @@ function ProtectedRoute({ children }: { children: React.ReactNode }) {
       return () => clearTimeout(timeout);
     }
   }, [loading]);
-  
+
   useEffect(() => {
     const checkBan = async () => {
       if (!user) {
         setCheckingBan(false);
         return;
       }
-      
+
       try {
         const { data: profile, error } = await supabase
           .from('profiles')
           .select('*')
           .eq('user_id', user.id)
           .maybeSingle();
-        
+
         if (error) {
           console.error('Erro ao verificar ban:', error);
           setCheckingBan(false);
           return;
         }
-        
+
         const isBannedProfile = (profile as { is_banned?: boolean; banned_until?: string | null })?.is_banned;
         const bannedUntilStr = (profile as { is_banned?: boolean; banned_until?: string | null })?.banned_until;
-        
+
         if (isBannedProfile) {
           const bannedUntil = bannedUntilStr ? new Date(bannedUntilStr) : null;
           const now = new Date();
-          
+
           // Se tem data de expiração e já passou, não está mais banido
           if (bannedUntil && bannedUntil < now) {
             // Atualizar status no banco
@@ -95,11 +120,11 @@ function ProtectedRoute({ children }: { children: React.ReactNode }) {
           } else {
             // Está banido
             setIsBanned(true);
-            const daysLeft = bannedUntil 
+            const daysLeft = bannedUntil
               ? Math.ceil((bannedUntil.getTime() - now.getTime()) / (1000 * 60 * 60 * 24))
               : null;
             setBanMessage(
-              bannedUntil 
+              bannedUntil
                 ? `Sua conta foi banida. Você poderá acessar novamente em ${daysLeft} dia(s) (${bannedUntil.toLocaleDateString('pt-BR')}).`
                 : 'Sua conta foi banida permanentemente.'
             );
@@ -117,14 +142,14 @@ function ProtectedRoute({ children }: { children: React.ReactNode }) {
         setCheckingBan(false);
       }
     };
-    
+
     if (!loading && user) {
       checkBan();
     } else if (!loading && !user) {
       setCheckingBan(false);
     }
   }, [user, loading]);
-  
+
   // Se loading demorar muito, libera mesmo assim
   if ((loading && !loadingTimeout) || checkingBan) {
     return (
@@ -135,11 +160,11 @@ function ProtectedRoute({ children }: { children: React.ReactNode }) {
       </div>
     );
   }
-  
+
   if (!user) {
     return <Navigate to="/auth" replace />;
   }
-  
+
   if (isBanned) {
     return (
       <div className="min-h-screen flex items-center justify-center bg-[#0a0a0a] p-4">
@@ -157,13 +182,13 @@ function ProtectedRoute({ children }: { children: React.ReactNode }) {
       </div>
     );
   }
-  
+
   return <>{children}</>;
 }
 
 function SupportRoute({ children }: { children: React.ReactNode }) {
   const { user, loading } = useAuth();
-  
+
   if (loading) {
     return (
       <div className="min-h-screen flex items-center justify-center bg-[#0a0a0a]">
@@ -173,11 +198,11 @@ function SupportRoute({ children }: { children: React.ReactNode }) {
       </div>
     );
   }
-  
+
   if (!user) {
     return <Navigate to="/support/login" replace />;
   }
-  
+
   return <>{children}</>;
 }
 
@@ -208,11 +233,12 @@ function AppRoutes() {
 function AppContent() {
   // Aplicar tema dinamicamente (dentro do QueryClientProvider)
   useApplyTheme();
-  
+
   return (
     <TooltipProvider>
       <Toaster />
       <Sonner />
+      <ConnectionTest />
       <BrowserRouter>
         <AuthProvider>
           <AppRoutes />
