@@ -3,8 +3,9 @@ import { createClient } from '@supabase/supabase-js';
 import type { Database } from './types';
 
 // Fallback hardcoded credentials to ensure it works even if Vercel env vars fail
-const SUPABASE_URL = (import.meta.env.VITE_SUPABASE_URL || 'https://adrnoeqpbhhecftkmtdh.supabase.co').trim();
-const SUPABASE_PUBLISHABLE_KEY = (import.meta.env.VITE_SUPABASE_PUBLISHABLE_KEY || 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImFkcm5vZXFwYmhoZWNmdGttdGRoIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjUzNzk5NzQsImV4cCI6MjA4MDk1NTk3NH0.Bl9kE-8J5CE1aQ69OyM-9JDjQBDKSqxAsiGL978zgxA').trim();
+// Projeto: oglakfbpuosrhhtbyprw (banco de dados existente em produção)
+const SUPABASE_URL = (import.meta.env.VITE_SUPABASE_URL || 'https://oglakfbpuosrhhtbyprw.supabase.co').trim();
+const SUPABASE_PUBLISHABLE_KEY = (import.meta.env.VITE_SUPABASE_PUBLISHABLE_KEY || 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im9nbGFrZmJwdW9zcmhodGJ5cHJ3Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjQ1NDA5OTksImV4cCI6MjA4MDExNjk5OX0.q6wG6Wqs6kR2EfEuoMRyJqULUUNS2zlR3WzyvUSFVt8').trim();
 
 // Validate environment variables - apenas em desenvolvimento
 if (import.meta.env.DEV) {
